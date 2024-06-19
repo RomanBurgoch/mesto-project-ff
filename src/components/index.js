@@ -1,6 +1,13 @@
 import "../styles/pages/index.css";
-import { openModal, closeModal, addClassforAnimated } from "./modal.js";
-import { initialCards, createCard, removeCard } from "./cards.js";
+import {
+  openModal,
+  closeModal,
+  closeModalByOverlay,
+  addClassforAnimated,
+  fillEditModalInputs,
+} from "./modal.js";
+import { initialCards } from "./cards.js";
+import { createCard, removeCard, likeCard } from "./card.js";
 
 const cardTemplate = document.querySelector("#card-template").content;
 const placesList = document.querySelector(".places__list");
@@ -19,20 +26,37 @@ const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 initialCards.forEach(function (item) {
-  const card = createCard(item, popupImage);
+  const card = cardImageClickHandler(item);
   placesList.append(card);
 });
 
+function cardImageClickHandler(item) {
+  const card = createCard(item, cardTemplate, openImage, removeCard, likeCard);
+  const cardImage = card.querySelector(".card__image");
+  cardImage.addEventListener("click", openImage);
+  return card;
+}
+
+function openImage(evt) {
+  openModal(popupImage);
+  const openedImage = popupImage.querySelector(".popup__image");
+  const openedImageCaption = popupImage.querySelector(".popup__caption");
+  openedImage.src = evt.target.src;
+  openedImageCaption.textContent = evt.target.alt;
+}
+
 profileEditButton.addEventListener("click", () => {
   openModal(popupEdit);
+  fillEditModalInputs(nameInput, jobInput, profileTitle, profileDescription);
 });
 profileAddButton.addEventListener("click", () => {
   openModal(popupNewCard);
+  newPlaceForm.reset();
 });
 
-popupEdit.addEventListener("click", closeModal);
-popupNewCard.addEventListener("click", closeModal);
-popupImage.addEventListener("click", closeModal);
+popupEdit.addEventListener("click", closeModalByOverlay);
+popupNewCard.addEventListener("click", closeModalByOverlay);
+popupImage.addEventListener("click", closeModalByOverlay);
 
 addClassforAnimated(popupEdit);
 addClassforAnimated(popupNewCard);
@@ -44,7 +68,7 @@ function handleProfileFormSubmit(evt) {
   const jobValue = jobInput.value;
   profileTitle.textContent = nameValue;
   profileDescription.textContent = jobValue;
-  closeModal(evt);
+  closeModal();
 }
 
 function handleNewPlaceFormSubmit(evt) {
@@ -55,23 +79,10 @@ function handleNewPlaceFormSubmit(evt) {
     name: newPlaceNameValue,
     link: newPlaceLinkValue,
   };
-  const newCard = createCard(newCardObj, popupImage);
-  placesList.prepend(newCard);
-  closeModal(evt);
+  const card = cardImageClickHandler(newCardObj);
+  placesList.prepend(card);
+  closeModal();
 }
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
-
-export {
-  cardTemplate,
-  profileEditButton,
-  profileAddButton,
-  profileTitle,
-  profileDescription,
-  nameInput,
-  jobInput,
-  popupEdit,
-  popupNewCard,
-  popupImage
-};
