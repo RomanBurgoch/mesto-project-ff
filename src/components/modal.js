@@ -29,20 +29,9 @@ function closeModalByEsc(evt) {
   }
 }
 
-function fillEditModalInputs(
-  nameInput,
-  jobInput,
-  profileTitle,
-  profileDescription
-) {
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-}
-
 export {
   openModal,
   closeModal,
   addClassforAnimated,
-  fillEditModalInputs,
   closeModalByOverlay,
 };

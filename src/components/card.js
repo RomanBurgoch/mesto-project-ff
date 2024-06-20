@@ -13,6 +13,7 @@ function createCard(item, cardTemplate, openImage, removeCard, likeCard) {
   cardTitle.textContent = item.name;
   deleteButton.addEventListener("click", removeCard);
   likeButton.addEventListener("click", likeCard);
+  cardImage.addEventListener("click", openImage);
   return card;
 }
 

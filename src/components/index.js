@@ -4,7 +4,6 @@ import {
   closeModal,
   closeModalByOverlay,
   addClassforAnimated,
-  fillEditModalInputs,
 } from "./modal.js";
 import { initialCards } from "./cards.js";
 import { createCard, removeCard, likeCard } from "./card.js";
@@ -32,8 +31,6 @@ initialCards.forEach(function (item) {
 
 function cardImageClickHandler(item) {
   const card = createCard(item, cardTemplate, openImage, removeCard, likeCard);
-  const cardImage = card.querySelector(".card__image");
-  cardImage.addEventListener("click", openImage);
   return card;
 }
 
@@ -47,7 +44,7 @@ function openImage(evt) {
 
 profileEditButton.addEventListener("click", () => {
   openModal(popupEdit);
-  fillEditModalInputs(nameInput, jobInput, profileTitle, profileDescription);
+  fillEditModalInputs();
 });
 profileAddButton.addEventListener("click", () => {
   openModal(popupNewCard);
@@ -82,6 +79,11 @@ function handleNewPlaceFormSubmit(evt) {
   const card = cardImageClickHandler(newCardObj);
   placesList.prepend(card);
   closeModal();
+}
+
+function fillEditModalInputs() {
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
 }
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
