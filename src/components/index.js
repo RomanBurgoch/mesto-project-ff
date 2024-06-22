@@ -25,11 +25,11 @@ const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 initialCards.forEach(function (item) {
-  const card = cardImageClickHandler(item);
+  const card = makeCard(item);
   placesList.append(card);
 });
 
-function cardImageClickHandler(item) {
+function makeCard(item) {
   const card = createCard(item, cardTemplate, openImage, removeCard, likeCard);
   return card;
 }
@@ -76,7 +76,7 @@ function handleNewPlaceFormSubmit(evt) {
     name: newPlaceNameValue,
     link: newPlaceLinkValue,
   };
-  const card = cardImageClickHandler(newCardObj);
+  const card = makeCard(newCardObj);
   placesList.prepend(card);
   closeModal();
 }
