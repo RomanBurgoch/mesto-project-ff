@@ -29,9 +29,4 @@ function closeModalByEsc(evt) {
   }
 }
 
-export {
-  openModal,
-  closeModal,
-  addClassforAnimated,
-  closeModalByOverlay,
-};
+export { openModal, closeModal, addClassforAnimated, closeModalByOverlay };
