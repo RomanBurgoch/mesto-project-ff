@@ -91,8 +91,8 @@ function hasInvalidInput(inputList) {
 
 export {
   enableValidation,
-  setEventListeners,
   isValid,
   showInputError,
   hideInputError,
+  clearValidation
 };

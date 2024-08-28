@@ -14,7 +14,7 @@ function removeCard(evt, itemId) {
     });
 }
 
-function createCard(item, cardTemplate, openImage, removeCard, likeCard) {
+function createCard(item, cardTemplate, openImage, removeCard, likeCard, userId) {
   const card = cardTemplate.querySelector(".places__item").cloneNode(true);
   const cardImage = card.querySelector(".card__image");
   const cardTitle = card.querySelector(".card__title");
@@ -24,9 +24,9 @@ function createCard(item, cardTemplate, openImage, removeCard, likeCard) {
   cardImage.src = item.link;
   cardImage.alt = item.name;
   cardTitle.textContent = item.name;
-  hideNotMyDeleteButton(item, deleteButton);
-  checkZeroLikes(item, likeCount);
-  checkLikeByMyself(item, likeButton);
+  hideNotMyDeleteButton(item, userId, deleteButton);
+  setLikesCount(item, likeCount);
+  checkLikeByMyself(item, userId, likeButton);
   deleteButton.addEventListener("click", (evt) => removeCard(evt, item._id));
   likeButton.addEventListener("click", () =>
     likeCard(item, likeButton, likeCount)
@@ -43,7 +43,7 @@ function likeCard(item, likeButton, likeCount) {
     removeLikeFromServer(item._id)
       .then((res) => {
         likeButton.classList.remove("card__like-button_is-active");
-        checkZeroLikes(res, likeCount);
+        setLikesCount(res, likeCount);
       })
       .catch((err) => {
         console.log(err);
@@ -52,7 +52,7 @@ function likeCard(item, likeButton, likeCount) {
     likeCardOnServer(item._id)
       .then((res) => {
         likeButton.classList.add("card__like-button_is-active");
-        checkZeroLikes(res, likeCount);
+        setLikesCount(res, likeCount);
       })
       .catch((err) => {
         console.log(err);
@@ -60,7 +60,7 @@ function likeCard(item, likeButton, likeCount) {
   }
 }
 
-function checkZeroLikes(item, likeCount) {
+function setLikesCount(item, likeCount) {
   if (item.likes.length > 0) {
     return (likeCount.textContent = item.likes.length);
   } else {
@@ -68,14 +68,14 @@ function checkZeroLikes(item, likeCount) {
   }
 }
 
-function checkLikeByMyself(item, likeButton) {
-  const equal = (element) => element._id == item._userId;
+function checkLikeByMyself(item, userId, likeButton) {
+  const equal = (element) => element._id == userId;
   const isMyLike = item.likes.some(equal);
   if (isMyLike) return likeButton.classList.add("card__like-button_is-active");
 }
 
-function hideNotMyDeleteButton(item, deleteButton) {
-  if (item.owner._id != item._userId)
+function hideNotMyDeleteButton(item, userId, deleteButton) {
+  if (item.owner._id != userId)
     return (deleteButton.style.display = "none");
 }
 
